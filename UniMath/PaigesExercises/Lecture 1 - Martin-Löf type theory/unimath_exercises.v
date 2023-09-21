@@ -1,7 +1,12 @@
+(*
+  I started solving these exercises in the web interface ( https://unimath.github.io/live/ ),
+  then I copied the exercise files into the UniMath directory to make it work in Emacs.
+*)
+
 Require Export UniMath.Foundations.All.
 
 (*
-Note that there is only one universe in UniMath, called UU (not Prop, Set, or Type as in vanilla Coq). It is defined in UniMath as 
+Note that there is only one universe in UniMath, called UU (not Prop, Set, or Type as in vanilla Coq). It is defined in UniMath as
 
 Definition UU := Type.
 *)
@@ -24,9 +29,23 @@ Notation "A -> B" := (forall (_ : A), B) : type_scope.
 You can write it as ~\to~.
 *)
 
-Definition not : bool → bool.
+Definition not : bool → bool
+  :=
+  fun b =>
+  match b with
+    | true => false
+    | false => true
+  end.
+
+Definition not_alternative : bool → bool.
 Proof.
-    Admitted.
+  intro b.
+  exact (
+    match b with
+      | true => false
+      | false => true
+    end).
+Defined.
 
 Compute (not true).
 (*Result: = false : bool*)
@@ -60,9 +79,20 @@ Proof.
 
 (*Exercise 3*)
 
-Definition add : nat → nat → nat.
-Proof. 
-    Admitted.
+Fixpoint add (a : nat) (b : nat) : nat :=
+   match b with
+    | 0 => a
+    | S b' => S (add a b')
+  end.
+
+Definition add_alternative : nat → nat → nat.
+Proof.
+  intro a.
+  intro b.
+  induction b.
+  - exact a.
+  - exact (S IHb).
+Defined.
 
 Compute (add 5 7).
 (*Result: = 12 : nat*)
@@ -72,7 +102,7 @@ Compute (add 12 21).
 
 Print add.
 (* Result:
-add = 
+add =
 λ n m : nat, nat_rect (λ _ : nat, nat) n (λ _ IHm : nat, S IHm) m
 	 : nat → nat → nat
 Note:
@@ -128,7 +158,7 @@ Notation idpath := paths_refl .
 *)
 
 Definition ap {A B : UU} (f : A → B) {x y : A} (p : x = y) : f x = f y.
-Proof. 
+Proof.
   Admitted.
 
 (* Exercise 7 *)
