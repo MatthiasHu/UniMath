@@ -75,7 +75,12 @@ Notation  "1" := (S 0) : nat_scope.
 
 Definition ι : bool → nat.
 Proof.
-  Admitted.
+  (* Not completely sure what I am supposed to do here. *)
+  intro b.
+  induction b.
+  - exact 0.
+  - exact 1.
+Defined.
 
 (*Exercise 3*)
 
@@ -114,7 +119,12 @@ Note:
 
 Definition mult : nat → nat → nat.
 Proof.
-  Admitted.
+  intro a.
+  intro b.
+  induction a.
+  - exact 0.
+  - exact (add IHa b).
+Defined.
 
 Compute (mult 2 3).
 (*Result: = 6
@@ -141,7 +151,11 @@ Notation "x ,, y" := (tpair _ x y).
 
 Definition π1 {P : UU} (Q : P → UU) : (∑ (x : P), Q x) → P.
 Proof.
-  Admitted.
+  intro pq.
+  destruct pq as [p q].
+  exact p.
+Defined.
+
 
 (* Exercise 6*)
 
@@ -159,7 +173,9 @@ Notation idpath := paths_refl .
 
 Definition ap {A B : UU} (f : A → B) {x y : A} (p : x = y) : f x = f y.
 Proof.
-  Admitted.
+  induction p.
+  exact (idpath (f x)).
+Qed.
 
 (* Exercise 7 *)
 
@@ -167,7 +183,17 @@ Proof.
 
 Definition left_unit (n : nat) : add 0 n = n.
 Proof.
-  Admitted.
+  induction n.
+  - exact (idpath 0).
+  - simpl.
+    rewrite IHn.
+    apply idpath.
+Qed.
+
+Definition right_unit (n : nat) : add n 0 = n.
+Proof.
+  exact (idpath n).
+Qed.
 
 (* Exercise 8 *)
 
